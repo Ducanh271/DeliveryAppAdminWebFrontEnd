@@ -1,16 +1,42 @@
-# React + Vite
+# 🚚 DeliveryAppAdminWebFrontEnd
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**DeliveryAppAdminWebFrontEnd** is the web-based admin dashboard for the DeliveryApp system.  
+It allows administrators to manage all aspects of the delivery platform — including products, orders, customers, and shippers — through a modern and responsive web interface.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Features
 
-## React Compiler
+- 🔐 **Admin Authentication** — Secure login system for administrators.
+- 📦 **Product Management** — Add, view, and delete products with image uploads.
+- 📬 **Order Management** — View and accept pending orders; monitor order status.
+- 👤 **Customer Management** — View customer accounts and ban/unban users.
+- 🚴 **Shipper Management** — Manage shippers, create new ones, and control their account status.
+- 📊 **Dashboard Overview** — Displays platform metrics such as users, orders, revenue, etc.
+- 🧭 **Sidebar Navigation** — Simple navigation across Dashboard, Products, Orders, Customers, and Shippers.
+- 💬 **Responsive Design** — Works smoothly on all screen sizes.
 
-The React Compiler is not enabled on this template. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 🛠️ Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+| Layer | Technology |
+|-------|-------------|
+| **Frontend Framework** | React + Vite |
+| **UI Library** | Material UI (MUI v5) |
+| **Routing** | React Router DOM |
+| **HTTP Client** | Axios |
+| **Charts** | Recharts |
+| **State Management** | React Hooks |
+| **Backend API** | Golang (Gin Framework) |
+
+---
+
+## ⚙️ Installation & Setup
+
+### 1️⃣ Clone the repository
+
+```bash
+git clone https://github.com/your-username/DeliveryAppAdminWebFrontEnd.git
+cd DeliveryAppAdminWebFrontEnd
+
