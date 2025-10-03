@@ -1,0 +1,20 @@
+my-admin@0.0.0 /home/duckanh/Workspace/front_end/DeliveryAdminWeb/my-admin
+├── @emotion/react@11.14.0
+├── @emotion/styled@11.14.1
+├── @eslint/js@9.36.0
+├── @mui/icons-material@7.3.2
+├── @mui/material@7.3.2
+├── @types/react-dom@19.1.9
+├── @types/react@19.1.15
+├── @vitejs/plugin-react@5.0.4
+├── axios@1.12.2
+├── eslint-plugin-react-hooks@5.2.0
+├── eslint-plugin-react-refresh@0.4.22
+├── eslint@9.36.0
+├── globals@16.4.0
+├── react-dom@19.1.1
+├── react-router-dom@7.9.3
+├── react@19.1.1
+├── recharts@3.2.1
+└── vite@npm:rolldown-vite@7.1.12 overridden
+
