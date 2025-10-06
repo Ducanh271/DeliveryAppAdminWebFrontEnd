@@ -23,6 +23,8 @@ import {
   Snackbar,
   Alert,
   InputAdornment,
+  TableContainer,
+  Paper,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -41,7 +43,7 @@ function Products() {
   const [loading, setLoading] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
   const [search, setSearch] = useState("");
-  const [message, setMessage] = useState({ text: "", type: "" }); // ✅ Snackbar message
+  const [message, setMessage] = useState({ text: "", type: "" });
 
   const [formData, setFormData] = useState({
     name: "",
@@ -52,7 +54,7 @@ function Products() {
     images: [],
   });
 
-  // 🔹 Fetch danh sách sản phẩm (hỗ trợ search)
+  // Fetch danh sách sản phẩm (hỗ trợ search)
   const fetchProducts = async (page = 1) => {
     try {
       const query = search ? `&search=${encodeURIComponent(search)}` : "";
@@ -72,7 +74,7 @@ function Products() {
     fetchProducts(value);
   };
 
-  // 🔹 Mở / Đóng form thêm sản phẩm
+  // Mở / Đóng form thêm sản phẩm
   const handleOpenForm = () => setOpenForm(true);
   const handleCloseForm = () => {
     setOpenForm(false);
@@ -95,7 +97,7 @@ function Products() {
     setFormData((prev) => ({ ...prev, images: e.target.files }));
   };
 
-  // 🔹 Submit form thêm sản phẩm
+  // Submit form thêm sản phẩm
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -125,7 +127,7 @@ function Products() {
     }
   };
 
-  // 🔹 Xóa sản phẩm
+  // Xóa sản phẩm
   const handleDeleteClick = (product) => {
     setProductToDelete(product);
     setOpenConfirm(true);
@@ -149,92 +151,121 @@ function Products() {
   };
 
   return (
-    <Container>
+    <Container maxWidth="lg" sx={{ mt: 3 }}>
       {/* Tiêu đề + tìm kiếm + nút thêm */}
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mt: 3, mb: 2 }}>
-        <Typography variant="h4" gutterBottom>
+      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
+        <Typography variant="h5" fontWeight={600}>
           Quản lý Sản phẩm
         </Typography>
-        <TextField
-          size="small"
-          placeholder="Tìm sản phẩm..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon color="action" />
-              </InputAdornment>
-            ),
-          }}
-          sx={{ width: 250 }}
-        />
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<AddIcon />}
-          onClick={handleOpenForm}
-        >
-          Thêm sản phẩm
-        </Button>
+
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <TextField
+            size="small"
+            placeholder="Tìm sản phẩm..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon color="action" />
+                </InputAdornment>
+              ),
+            }}
+            sx={{ width: 250, backgroundColor: "#fff", borderRadius: 1 }}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<AddIcon />}
+            onClick={handleOpenForm}
+          >
+            Thêm sản phẩm
+          </Button>
+        </Box>
       </Box>
 
       {/* Bảng sản phẩm */}
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Ảnh</TableCell>
-            <TableCell>ID</TableCell>
-            <TableCell>Tên</TableCell>
-            <TableCell>Mô tả</TableCell>
-            <TableCell>Giá</TableCell>
-            <TableCell>Số lượng</TableCell>
-            <TableCell>Đã bán</TableCell>
-            <TableCell align="center">Hành động</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {products.length === 0 ? (
+      <TableContainer component={Paper} elevation={3} sx={{ borderRadius: 2 }}>
+        <Table>
+          <TableHead sx={{ backgroundColor: "#f4f6f8" }}>
             <TableRow>
-              <TableCell colSpan={8} align="center">
-                Không có sản phẩm nào
-              </TableCell>
+              <TableCell align="center">Ảnh</TableCell>
+              <TableCell>ID</TableCell>
+              <TableCell>Tên</TableCell>
+              <TableCell>Mô tả</TableCell>
+              <TableCell>Giá</TableCell>
+              <TableCell>Số lượng</TableCell>
+              <TableCell>Đã bán</TableCell>
+              <TableCell align="center">Hành động</TableCell>
             </TableRow>
-          ) : (
-            products.map((p) => {
-              const mainImage =
-                p.images?.find((img) => img.IsMain)?.URL ||
-                p.images?.[0]?.URL ||
-                "";
-              return (
-                <TableRow key={p.id}>
-                  <TableCell>
-                    <Avatar src={mainImage} variant="square">
-                      {p.name[0]}
-                    </Avatar>
-                  </TableCell>
-                  <TableCell>{p.id}</TableCell>
-                  <TableCell>{p.name}</TableCell>
-                  <TableCell>{p.description}</TableCell>
-                  <TableCell>{p.price.toLocaleString()} đ</TableCell>
-                  <TableCell>{p.qty_initial}</TableCell>
-                  <TableCell>{p.qty_sold}</TableCell>
-                  <TableCell align="center">
-                    <Tooltip title="Xóa sản phẩm">
-                      <IconButton color="error" onClick={() => handleDeleteClick(p)} size="small">
-                        <DeleteIcon />
-                      </IconButton>
-                    </Tooltip>
-                  </TableCell>
-                </TableRow>
-              );
-            })
-          )}
-        </TableBody>
-      </Table>
+          </TableHead>
+          <TableBody>
+            {products.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={8} align="center">
+                  Không có sản phẩm nào
+                </TableCell>
+              </TableRow>
+            ) : (
+              products.map((p) => {
+                const mainImage =
+                  p.images?.find((img) => img.IsMain)?.URL ||
+                  p.images?.[0]?.URL ||
+                  "";
+                return (
+                  <TableRow
+                    key={p.id}
+                    hover
+                    sx={{
+                      transition: "0.2s",
+                      "&:hover": { backgroundColor: "#fafafa" },
+                    }}
+                  >
+                    <TableCell align="center">
+                      <Avatar
+                        src={mainImage}
+                        variant="rounded"
+                        sx={{ width: 56, height: 56, mx: "auto" }}
+                      >
+                        {p.name[0]}
+                      </Avatar>
+                    </TableCell>
+                    <TableCell>{p.id}</TableCell>
+                    <TableCell>{p.name}</TableCell>
+                    <TableCell
+                      sx={{
+                        maxWidth: 250,
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
+                    >
+                      {p.description}
+                    </TableCell>
+                    <TableCell>{p.price.toLocaleString()} đ</TableCell>
+                    <TableCell>{p.qty_initial}</TableCell>
+                    <TableCell>{p.qty_sold}</TableCell>
+                    <TableCell align="center">
+                      <Tooltip title="Xóa sản phẩm">
+                        <IconButton
+                          color="error"
+                          onClick={() => handleDeleteClick(p)}
+                          size="small"
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
+                  </TableRow>
+                );
+              })
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
 
       {/* Phân trang */}
-      <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
         <Pagination
           count={pagination.total_pages}
           page={pagination.page}

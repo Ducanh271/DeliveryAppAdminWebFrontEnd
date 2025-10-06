@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import {
   Box,
@@ -11,12 +12,22 @@ import PeopleIcon from "@mui/icons-material/People";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 import api from "../api";
 
 function Dashboard() {
   const [stats, setStats] = useState({
     users: 0,
+    shippers: 0,
     orders: 0,
     products: 0,
     revenue: 0,
@@ -25,28 +36,32 @@ function Dashboard() {
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchStats = async () => {
       try {
-        // 👉 bạn có thể gọi API thực tế ở đây:
-        // const res = await api.get("/admin/stats");
-        // setStats(res.data);
+        const [usersRes, shippersRes, ordersRes, productsRes] = await Promise.all([
+          api.get("/admin/customers/num-customer"),
+          api.get("/admin/shippers/num-shippers"),
+          api.get("/admin/orders/num-revenue"),
+          api.get("/admin/products/num-products"),
+        ]);
 
-        // Dữ liệu mẫu
         setStats({
-          users: 157,
-          orders: 42,
-          products: 23,
-          revenue: 1280000,
+          users: usersRes.data["number of customers"] || 0,
+          shippers: shippersRes.data["number of shippers"] || 0,
+          orders: ordersRes.data["number of order"] || 0,
+          products: productsRes.data["number of products"] || 0,
+          revenue: ordersRes.data["revenue"] || 0,
         });
 
+        // 🔹 Biểu đồ giả lập (bạn có thể thay bằng API thực tế sau này)
         setChartData([
-          { date: "T2", revenue: 200000 },
-          { date: "T3", revenue: 250000 },
-          { date: "T4", revenue: 400000 },
-          { date: "T5", revenue: 180000 },
-          { date: "T6", revenue: 350000 },
-          { date: "T7", revenue: 500000 },
-          { date: "CN", revenue: 420000 },
+          { date: "Mon", revenue: 200000 },
+          { date: "Tue", revenue: 350000 },
+          { date: "Wed", revenue: 500000 },
+          { date: "Thu", revenue: 280000 },
+          { date: "Fri", revenue: 450000 },
+          { date: "Sat", revenue: 600000 },
+          { date: "Sun", revenue: 380000 },
         ]);
       } catch (err) {
         console.error("Failed to fetch dashboard data:", err);
@@ -55,11 +70,18 @@ function Dashboard() {
       }
     };
 
-    fetchData();
+    fetchStats();
   }, []);
 
   const StatCard = ({ title, value, icon, color }) => (
-    <Card elevation={3} sx={{ borderRadius: 3 }}>
+    <Card
+      elevation={3}
+      sx={{
+        borderRadius: 3,
+        transition: "0.2s",
+        "&:hover": { boxShadow: 6, transform: "translateY(-4px)" },
+      }}
+    >
       <CardContent sx={{ display: "flex", alignItems: "center" }}>
         <Box
           sx={{
@@ -71,6 +93,8 @@ function Dashboard() {
             alignItems: "center",
             justifyContent: "center",
             mr: 2,
+            minWidth: 45,
+            minHeight: 45,
           }}
         >
           {icon}
@@ -88,7 +112,7 @@ function Dashboard() {
   );
 
   return (
-    <Box sx={{ p: 2, minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ p: 3, bgcolor: "#f5f6fa", minHeight: "100vh" }}>
       <Typography variant="h5" sx={{ mb: 3, fontWeight: 600 }}>
         Dashboard Overview
       </Typography>
@@ -100,16 +124,24 @@ function Dashboard() {
       ) : (
         <>
           {/* ==== Thống kê nhanh ==== */}
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6} md={3}>
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={6} md={2.4}>
               <StatCard
-                title="Users"
+                title="Customers"
                 value={stats.users}
                 color="#1976d2"
                 icon={<PeopleIcon />}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={3}>
+            <Grid item xs={12} sm={6} md={2.4}>
+              <StatCard
+                title="Shippers"
+                value={stats.shippers}
+                color="#6a1b9a"
+                icon={<LocalShippingIcon />}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={2.4}>
               <StatCard
                 title="Orders"
                 value={stats.orders}
@@ -117,7 +149,7 @@ function Dashboard() {
                 icon={<ShoppingCartIcon />}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={3}>
+            <Grid item xs={12} sm={6} md={2.4}>
               <StatCard
                 title="Products"
                 value={stats.products}
@@ -125,7 +157,7 @@ function Dashboard() {
                 icon={<Inventory2Icon />}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={3}>
+            <Grid item xs={12} sm={6} md={2.4}>
               <StatCard
                 title="Revenue (₫)"
                 value={stats.revenue}
@@ -135,8 +167,8 @@ function Dashboard() {
             </Grid>
           </Grid>
 
-          {/* ==== Biểu đồ ==== */}
-          <Box sx={{ mt: 5 }}>
+          {/* ==== Biểu đồ doanh thu ==== */}
+          <Box sx={{ mt: 6 }}>
             <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
               Weekly Revenue
             </Typography>
@@ -163,4 +195,3 @@ function Dashboard() {
 }
 
 export default Dashboard;
-

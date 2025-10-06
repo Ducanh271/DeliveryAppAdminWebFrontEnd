@@ -195,6 +195,15 @@ function Orders() {
                         >
                           Nhận đơn
                         </Button>
+                      ) : order.order_status === "cancelled" ? (
+                        <Button
+                          variant="outlined"
+                          color="error"
+                          size="small"
+                          disabled
+                        >
+                          Không nhận
+                        </Button>
                       ) : (
                         <Button
                           variant="outlined"
