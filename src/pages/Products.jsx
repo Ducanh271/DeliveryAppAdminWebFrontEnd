@@ -112,7 +112,7 @@ function Products() {
         data.append("images", formData.images[i]);
       }
 
-      await api.post("/admin/create-product", data, {
+      await api.post("/admin/products/create-product", data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
