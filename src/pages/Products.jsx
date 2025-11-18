@@ -57,7 +57,7 @@ function Products() {
   // Fetch danh sách sản phẩm (hỗ trợ search)
   const fetchProducts = async (page = 1) => {
     try {
-      const query = search ? `&search=${encodeURIComponent(search)}` : "";
+      const query = search ? `&q=${encodeURIComponent(search)}` : "";
       const res = await api.get(`/products?page=${page}&limit=${pagination.limit}${query}`);
       setProducts(res.data.products || []);
       setPagination(res.data.pagination);
@@ -66,10 +66,18 @@ function Products() {
     }
   };
 
+  // useEffect(() => {
+  //   fetchProducts(1);
+  // }, [search]);
   useEffect(() => {
-    fetchProducts(1);
-  }, [search]);
+    const handler = setTimeout(() => {
+      fetchProducts(1);
+    }, 500); // Chờ 500ms sau khi ngừng gõ mới gọi API
 
+    return () => {
+      clearTimeout(handler); // Xóa timeout cũ nếu người dùng gõ tiếp
+    };
+  }, [search]);
   const handlePageChange = (_, value) => {
     fetchProducts(value);
   };

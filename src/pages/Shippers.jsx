@@ -67,9 +67,9 @@ function Shippers() {
   const handleBanUnban = async (id, isBanned) => {
     try {
       if (isBanned) {
-        await api.post(`/admin/shippers/unban-shipper/${id}`);
+        await api.post(`/admin/shippers/unban/${id}`);
       } else {
-        await api.post(`/admin/shippers/ban-shipper/${id}`);
+        await api.post(`/admin/shippers/ban/${id}`);
       }
       fetchShippers(page);
     } catch (err) {
@@ -96,7 +96,7 @@ function Shippers() {
 
   const handleCreateShipper = async () => {
     try {
-      await api.post("/admin/create-shipper", newShipper);
+      await api.post("/admin/shippers", newShipper);
       setSnackbar({
         open: true,
         message: "Shipper created successfully!",

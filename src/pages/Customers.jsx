@@ -48,9 +48,9 @@ function Customers() {
   const handleBanUnban = async (id, isBanned) => {
     try {
       if (isBanned) {
-        await api.post(`/admin/customers/unban-customer/${id}`);
+        await api.post(`/admin/customers/unban/${id}`);
       } else {
-        await api.post(`/admin/customers/ban-customer/${id}`);
+        await api.post(`/admin/customers/ban/${id}`);
       }
 
       // ✅ Cập nhật trực tiếp trạng thái user trong state (không fetch lại toàn trang)

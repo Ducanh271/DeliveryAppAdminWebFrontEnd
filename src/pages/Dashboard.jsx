@@ -38,21 +38,32 @@ function Dashboard() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const [usersRes, shippersRes, ordersRes, productsRes] = await Promise.all([
-          api.get("/admin/customers/num-customer"),
-          api.get("/admin/shippers/num-shippers"),
-          api.get("/admin/orders/num-revenue"),
-          api.get("/admin/products/num-products"),
-        ]);
-
+        // const [usersRes, shippersRes, ordersRes, productsRes] = await Promise.all([
+        //   api.get("/admin/customers/num-customer"),
+        //   api.get("/admin/shippers/num-shippers"),
+        //   api.get("/admin/orders/num-revenue"),
+        //   api.get("/admin/products/num-products"),
+        // ]);
+        //
+        const res = await api.get("/admin/stats");
+        const res2 = await api.get("/admin/stats/orders");
+        // setStats({
+        //   users: usersRes.data["number of customers"] || 0,
+        //   shippers: shippersRes.data["number of shippers"] || 0,
+        //   orders: ordersRes.data["number of order"] || 0,
+        //   products: productsRes.data["number of products"] || 0,
+        //   revenue: ordersRes.data["revenue"] || 0,
+        // });
         setStats({
-          users: usersRes.data["number of customers"] || 0,
-          shippers: shippersRes.data["number of shippers"] || 0,
-          orders: ordersRes.data["number of order"] || 0,
-          products: productsRes.data["number of products"] || 0,
-          revenue: ordersRes.data["revenue"] || 0,
-        });
+          users: res.data.total_customers || res.data.TotalCustomers || 0,
+          shippers: res.data.total_shippers || res.data.TotalShippers || 0,
 
+          // Cảnh báo: Các trường dưới đây Backend (user_service.go) CHƯA TRẢ VỀ. 
+          // Chúng sẽ hiển thị là 0 cho đến khi bạn cập nhật logic backend.
+          orders: data.total_orders || 0,
+          products: res.data.total_products || 0,
+          revenue: res.data.total_revenue || 0,
+        });
         // 🔹 Biểu đồ giả lập (bạn có thể thay bằng API thực tế sau này)
         setChartData([
           { date: "Mon", revenue: 200000 },
